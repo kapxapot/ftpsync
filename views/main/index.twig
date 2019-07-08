@@ -1,0 +1,38 @@
+{% extends 'main/layout.twig' %}
+
+{% block content %}
+  	{% if projects|length > 0 %}
+    	<div class="panel panel-primary">
+	    	<div class="panel-heading panel-title">
+		    	<header>Мои проекты</header>
+		    </div>
+  	        <div class="panel-body flex-wrapper pb-0">
+      	        {% for p in projects %}
+            		<div class="flex-item card card--no-transition">
+            			<div class="card-body flex">
+        				    <div>
+            		    		<div class="card-body__title"><a href="{{ path_for('main.project', { 'id': p.id }) }}">{{ p.name }}</a></div>
+        			    		<div class="card-body__status mt-1">{{ p.sync_count_str }}</div>
+        				    </div>
+            			</div>
+            		</div>
+      	        {% endfor %}
+            </div>
+            <div class="panel-body">
+                <div class="ml-1">
+                    <a href="{{ path_for('admin.entities.projects') ~ '?action=create' }}">Добавить проект</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+    	<div class="panel panel-primary">
+	  	    <div class="panel-body">
+	  	        {% if not auth.user %}
+	  	            Для работы с системой требуется авторизация. Пожалуйста, <a href="javascript:void(0);" ng-click="signIn()">войдите</a>.
+	  	        {% else %}
+	  	            У вас пока нет проектов. Начните с <a href="{{ path_for('admin.entities.connections') ~ '?action=create' }}">создания соединения</a>.
+	  	        {% endif %}
+	        </div>
+	    </div>
+    {% endif %}
+{% endblock %}

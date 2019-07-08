@@ -1,0 +1,44 @@
+{% macro panel(context, title, body, footer = null) %}
+	{% import _self as m %}
+	<div class="panel panel-primary">
+		{{ m.panel_header(context, title) }}
+	  	<div class="panel-body">
+	  		{{ body }}
+	    </div>
+	    {% if footer %}
+		    <div class="panel-footer">
+		    	{{ footer }}
+		    </div>
+	    {% endif %}
+	</div>
+{% endmacro %}
+
+{% macro panel_header(context, title = null, data = null) %}
+	{% import _self as m %}
+	<div class="panel-heading panel-title heading-{{ game.alias }}">
+		<header>
+			{% if data.url %}
+				<a href="{{ data.url }}">{{ title|raw }}</a>
+			{% else %}
+				<span>{{ title|raw }}</span>
+			{% endif %}
+			{% if data.subtitle %}
+				<small>{{ data.subtitle }}</small>
+			{% endif %}
+		</header>
+		{% if data.buttons %}
+			<div class="panel-title-buttons">
+				{% for b in data.buttons %}
+					{{ b|raw }}
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+	{{ m.breadcrumbs(context, title ?? context.title, data) }}
+{% endmacro %}
+
+{% macro breadcrumbs(context, title, data = null) %}
+	{% import 'main/macros.twig' as m %}
+	{% set items = context.breadcrumbs %}
+	{{ m.breadcrumbs(context, items, data.bc_title ?? title) }}
+{% endmacro %}

@@ -1,0 +1,62 @@
+{% import 'macros.twig' as gm %}
+
+<div class="table-responsive" ng-cloak>
+    <table class="table table-striped mb-0">
+        <thead>
+            <tr>
+                <th rowspan="2">Папка</th>
+                <th rowspan="2">Файл</th>
+                <th colspan="2">
+                    <div>{{ sync.primary.name }}</div>
+                    <div class="sub-th">{{ sync.primary.connection.host }}</div>
+                    <div class="sub-th">{{ sync.primary.path }}</div>
+                </th>
+                <th colspan="2">
+                    <div>{{ sync.replica.name }}</div>
+                    <div class="sub-th">{{ sync.replica.connection.host }}</div>
+                    <div class="sub-th">{{ sync.replica.path }}</div>
+                </th>
+                <th rowspan="2">
+                    <button type="button" class="btn btn-warning btn-pad" data-id="{{ sync.id }}" ng-click="synchronizeAll($event);">{{ gm.gi('refresh', 'Синхронизировать всё') }}</button>
+                </th>
+            </tr>
+            <tr>
+                <th>Размер</th>
+                <th>Дата изменения</th>
+                <th>Размер</th>
+                <th>Дата изменения</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in sync.result.files if show_all or not file.in_sync %}
+                <tr>
+                    {% if file.path %}
+                        <td class="shaded">{{ file.path }}</td>
+                    {% else %}
+                        <td>&nbsp;</td>
+                    {% endif %}
+                    <td{% if file.ignored %} class="good"{% endif %}>{{ file.name }}</td>
+                    <td>{{ file.size }}</td>
+                    <td>{{ gm.moment(file.date_iso) }}</td>
+                    
+                    {% for replica in file.replicas %}
+                        {% if replica.no_file %}
+                            <td>&nbsp;</td>
+                            <td class="bad">НЕТ ФАЙЛА</td>
+                        {% else %}
+                            <td class="{{ replica.diff_size ? 'bad' : 'ok' }}">{{ replica.size }}</td>
+                            <td class="{{ replica.expired ? 'bad' : 'ok' }}">{{ gm.moment(replica.date_iso) }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td>
+                        {% if not file.ignored and not file.in_sync %}
+                            <button type="button" class="btn btn-success btn-pad" data-id="{{ sync.id }}" data-file="{{ file.full_name }}" ng-click="synchronize($event);" title="Синхронизировать {{ file.full_name }}"><i class="fas fa-sync-alt"></i></button>
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

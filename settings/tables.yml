@@ -1,0 +1,128 @@
+auth_tokens:
+  table: auth_tokens
+  private:
+    - id
+    - user_id
+    - token
+    - expires_at
+
+connections:
+  table: connections
+  api: full
+  name_field: name
+  sort: name
+  private:
+    - id
+    - name
+    - host
+    - user
+    - password
+    - created_at
+    - updated_at
+    - created_by
+    - updated_by
+
+folders:
+  table: folders
+  api: full
+  name_field: name
+  sort: name
+  private:
+    - id
+    - connection_id
+    - path
+    - name
+    - description
+    - created_at
+    - updated_at
+    - created_by
+    - updated_by
+
+menus:
+  table: menus
+  api: full
+  name_field: text
+  sort: created_at
+  reverse: true
+  private:
+    - id
+    - link
+    - text
+    - position
+    - created_at
+    - updated_at
+
+menu_items:
+  table: menu_items
+  api: full
+  name_field: text
+  sort: position
+  private:
+    - id
+    - menu_id
+    - link
+    - text
+    - position
+    - created_at
+    - updated_at
+
+projects:
+  table: projects
+  api: full
+  name_field: name
+  sort: name
+  private:
+    - id
+    - name
+    - url
+    - created_at
+    - updated_at
+    - created_by
+    - updated_by
+
+roles:
+  table: roles
+  api: full
+  name_field: name
+  sort: name
+  public:
+    - id
+    - name
+    - tag
+
+syncs:
+  table: syncs
+  api: full
+  name_field: name
+  sort: name
+  private:
+    - id
+    - project_id
+    - primary_id
+    - replica_id
+    - name
+    - ignore
+    - ignore_size
+    - created_at
+    - updated_at
+    - created_by
+    - updated_by
+
+tags:
+  table: tags
+
+users:
+  table: users
+  api: full
+  name_field: login
+  sort: created_at
+  reverse: true
+  public:
+    - id
+    - login
+    - name
+    - role_id
+    - created_at
+    - updated_at
+  private:
+    - email

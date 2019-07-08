@@ -1,0 +1,9 @@
+{% set d = sidebar.dummy %}
+{% if d %}
+	<div class="panel-secondary-heading">А это Sidebar</div>
+	<div class="panel panel-secondary">
+		<div class="panel-body">
+			<p>На сайте уже {{ d.count }} {{ d.count_str }}.</p>
+		</div>
+	</div>
+{% endif %}

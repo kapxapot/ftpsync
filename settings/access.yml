@@ -1,0 +1,68 @@
+actions:
+  - full:
+    - delete:
+      - edit:
+        - read:
+          - read_own:
+            - api_read
+        - create:
+          - api_create
+        - edit_own:
+          - api_edit
+        - publish:
+          - upload
+      - delete_own:
+        - api_delete
+
+templates:
+  admin_strict:
+    admin: [ full ]
+
+  admin_api:
+    admin: [ full ]
+    manager: [ api_read ]
+    user: [ api_read ]
+
+  editor_strict:
+    admin: [ full ]
+    manager: [ edit ]
+
+  editor:
+    admin: [ full ]
+    manager: [ edit ]
+    user: [ read ]
+
+  public:
+    admin: [ full ]
+    manager: [ edit ]
+    user: [ read_own, create, edit_own ]
+
+  public_extended:
+    admin: [ full ]
+    manager: [ edit ]
+    user: [ read, create, edit_own ]
+
+rights:
+  connections:
+    template: public
+
+  folders:
+    template: public
+
+  menus:
+    template: admin_strict
+
+  menu_items:
+    template: admin_strict
+
+  projects:
+    template: public
+
+  roles:
+    template: admin_api
+
+  syncs:
+    template: public
+
+  users:
+    template: admin_strict

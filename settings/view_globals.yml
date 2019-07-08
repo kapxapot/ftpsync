@@ -1,0 +1,40 @@
+site_name: FTP Sync
+site_bare_url: yoursite.com
+site_url: 'http://yoursite.com'
+cool_site_url: '//yoursite.com'
+site_description: 'FTP Synchronizer'
+short_site_description: 'FTP Synchronizer'
+twitter_card_image: 'http://yoursite.com/images/logo.png'
+touch_icon: 'http://yoursite.com/images/logo.png'
+contact_email: contact@yoursite.com
+copyright_from: 2018
+admin_copyright_from: 2018
+site_keywords: ftp, sync
+lang: ru
+
+no_search: true
+
+# folders for Twig only
+folders:
+  global: {PLASTICODE_PUBLIC_PATH}
+  local: {SITE_PUBLIC_PATH}
+
+mde: true
+
+disqus_alias: your-site
+google_analytics_id: your-google-analytics-id
+twitter_alias: YourTwitter
+
+angular:
+  app: bsApp
+  ctrl: bsCtrl
+
+admin_menu:
+  - connections
+  - projects
+  - group:
+      title: Сайт
+      items:
+        - users
+        - roles
+        - menus

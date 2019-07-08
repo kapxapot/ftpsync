@@ -1,0 +1,124 @@
+{% extends 'main/layout.twig' %}
+
+{% import 'main/macros.twig' as m %}
+{% import 'main/local_macros.twig' as lm %}
+
+{% block content %}
+	<div class="panel panel-primary">
+		{{ lm.panel_header(_context, title) }}
+	  	<div class="panel-body body-nopad">
+	  	    {% if project.syncs|length == 0 %}
+	  	        В проекте пока нет синхронизаций. <a href="{{ path_for('admin.entities.syncs', { 'id': project.id }) ~ '?action=create' }}">Создайте</a> новую.
+	  	    {% else %}
+    			<ul class="nav nav-tabs" role="tablist">
+        	  	    {% for sync in project.syncs %}
+    				    {{ m.tab(sync.id, sync.name, loop.first) }}
+        	  	    {% endfor %}
+    			</ul>
+
+			    <div class="tab-content">
+        	  	    {% for sync in project.syncs %}
+        				<div role="tabpanel" class="tab-pane fade{% if loop.first %} in active{% endif %}" id="{{ sync.id }}">
+        				    {% if sync.result.files|length > 0 %}
+			                    {% include 'components/sync.twig' %}
+        				    {% else %}
+        				        {{ sync.result.error ?? "Отсутствуют файлы для синхронизации." }}
+        				    {% endif %}
+        				</div>
+        	  	    {% endfor %}
+			    </div>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}
+
+{% set more_angular %}
+    $scope.buttonSpin = function(button) {
+	    let svg = $(button).find('svg');
+	    addClass(svg, 'fa-spin');
+    }
+
+    $scope.buttonStop = function(button) {
+	    let svg = $(button).find('svg');
+	    removeClass(svg, 'fa-spin');
+    }
+    
+    $scope.changeIcon = function(button, classNames) {
+        $(button).find('svg').replaceWith('<i class="' + classNames + '"></i>');
+    }
+
+	$scope.synchronize = function($event) {
+	    let button = $event.currentTarget;
+	    $scope.syncButton(button);
+	}
+	
+	$scope.syncButton = function(button) {
+	    let data = button.dataset;
+	    let syncId = data.id;
+
+	    button.disabled = true;
+	    
+	    $scope.buttonSpin(button);
+
+    	$scope.ajax({
+    		url: '{{ api }}sync/' + syncId + '/syncfile',
+    		data: data,
+    		onSuccess: $scope.syncSuccess,
+    		noSuccessMessage: true,
+    		onError: $scope.syncError,
+    		context: { button: button }
+    	});
+	}
+	
+	$scope.syncSuccess = function(data, context) {
+	    let button = context.button;
+	    $scope.buttonStop(button);
+	    
+	    //$(button).hide();
+	    $(button).removeClass('btn-success');
+	    $(button).addClass('btn-default');
+
+	    $scope.changeIcon(button, 'fas fa-check');
+	    
+	    button.title = 'Синхронизировано успешно!';
+	    
+	    let td = $(button).closest('td');
+	    let dateTd = td.prev();
+	    let sizeTd = dateTd.prev();
+	    
+	    console.log(data);
+	    
+	    dateTd.html(moment(data.modified_at).format('DD.MM.Y HH:mm'));
+	    dateTd.removeClass('bad');
+	    dateTd.addClass('ok');
+	    
+	    sizeTd.html(data.size);
+	    sizeTd.removeClass('bad');
+	    sizeTd.addClass('ok');
+	}
+	
+	$scope.syncError = function(data, context) {
+	    let button = context.button;
+	    $scope.buttonStop(button);
+	    
+	    //$(button).hide();
+	    $(button).removeClass('btn-success');
+	    $(button).addClass('btn-danger');
+
+	    $scope.changeIcon(button, 'fas fa-exclamation-circle');
+	    
+	    button.title = 'Ошибка синхронизации: ' + data.message;
+	}
+
+	$scope.synchronizeAll = function($event) {
+	    let button = $event.currentTarget;
+	    let data = button.dataset;
+	    let syncId = data.id;
+	    
+	    $('button[data-id]="' + syncId + '"').each(function() {
+	        if (this.dataset.file) {
+                $scope.syncButton(this);
+	        }
+	    });
+	}
+{% endset %}

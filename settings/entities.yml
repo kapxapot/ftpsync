@@ -1,0 +1,280 @@
+connections:
+  name_gen: соединения
+  name_accus: соединение
+  title: Соединения
+  
+  columns:
+    id:
+      name: id
+      attributes: [ readonly ]
+    
+    name:
+      name: Название
+
+    host:
+      name: Сервер
+      prefix: 'ftp://'
+
+    user:
+      name: Пользователь
+      attributes: [ hidden ]
+
+    password:
+      name: Пароль
+      attributes: [ hidden ]
+
+    created_by_name:
+      name: Владелец
+      attributes: [ readonly ]
+
+    created_at:
+      name: Дата создания
+      type: date
+      attributes: [ readonly ]
+
+    folders:
+      name: Папки
+      template: >
+        '<a href="connections/' + row.id + '/folders" class="btn btn-success btn-pad"><i class="glyphicon glyphicon-folder-open" title="Редактировать папки"></i></a>'
+      attributes: [ no_sort, readonly ]
+
+
+folders:
+  name_gen: папки
+  name_accus: папку
+  title: Папки
+  
+  columns:
+    id:
+      name: id
+      attributes: [ readonly ]
+
+    name:
+      name: Название
+    
+    path:
+      name: Путь
+      attributes: [ hidden ]
+
+    description:
+      name: Описание
+      type: html
+      attributes: [ nullable, hidden ]
+
+    created_by_name:
+      name: Владелец
+      attributes: [ readonly ]
+
+    created_at:
+      name: Дата создания
+      type: date
+      attributes: [ readonly ]
+
+
+menus:
+
+  name_gen: меню
+  name_accus: меню
+  title: Меню
+
+  delete_extra_message: " ' + i.text + ' (со всеми элементами)' + '"
+
+  columns:
+    id:
+      name: id
+      attributes: [ readonly ]
+
+    link:
+      name: Ссылка
+      type: site_url
+      template: >
+        '<a href="' + row.link + '">' + row.text + '</a>'
+
+    text:
+      name: Текст
+      attributes: [ hidden ]
+
+    position:
+      name: Позиция
+      type: number
+      default: 1
+    
+    created_at:
+      name: Дата создания
+      type: date
+      attributes: [ readonly ]
+
+    menu_items:
+      name: Подменю
+      template: >
+        '<a href="menus/' + row.id + '/menu_items"><button type="button" class="btn btn-success btn-pad"><span class="glyphicon glyphicon-align-justify" title="Редактировать элементы меню"></span></button></a>'
+      attributes: [ no_sort, readonly ]
+
+
+menu_items:
+
+  name_gen: элемента меню
+  name_accus: элемент меню
+  title: Элементы меню
+
+  columns:
+    id:
+      name: id
+      attributes: [ readonly ]
+    
+    link:
+      name: Ссылка
+      type: site_url
+      template: >
+        '<a href="' + row.link + '">' + row.text + '</a>'
+
+    text:
+      name: Текст
+      attributes: [ hidden ]
+
+    position:
+      name: Позиция
+      type: number
+      default: 1
+    
+    created_at:
+      name: Дата создания
+      type: date
+      attributes: [ readonly ]
+
+
+projects:
+  name_gen: проекта
+  name_accus: проект
+  title: Проекты
+  
+  columns:
+    id:
+      name: id
+      attributes: [ readonly ]
+    
+    name:
+      name: Название
+
+    url:
+      name: Веб-ссылка
+      type: url
+      attributes: [ nullable, hidden ]
+
+    created_by_name:
+      name: Владелец
+      attributes: [ readonly ]
+
+    created_at:
+      name: Дата создания
+      type: date
+      attributes: [ readonly ]
+
+    syncs:
+      name: Синхронизации
+      template: >
+        '<a href="projects/' + row.id + '/syncs" class="btn btn-success btn-pad"><i class="glyphicon glyphicon-refresh" title="Редактировать синхронизации"></i></a>'
+      attributes: [ no_sort, readonly ]
+
+
+roles:
+
+  name_gen: роли
+  name_accus: роль
+  title: Роли
+  
+  columns:
+    id:
+      name: id
+      attributes: [ readonly ]
+    
+    name:
+      name: Название
+
+    tag:
+      name: Тег
+
+
+syncs:
+  name_gen: синхронизации
+  name_accus: синхронизацию
+  title: Синхронизации
+  
+  columns:
+    id:
+      name: id
+      attributes: [ readonly ]
+
+    primary_id:
+      name: Источник
+      entity: folders
+      attributes: [ hidden ]
+    
+    replica_id:
+      name: Копия
+      entity: folders
+      attributes: [ hidden ]
+
+    name:
+      name: Название
+
+    ignore:
+      name: Игнорировать
+      attributes: [ nullable, hidden ]
+      tooltip: Через запятую.
+
+    ignore_size:
+      name: Игнорировать размер
+      attributes: [ nullable, hidden ]
+      tooltip: Через запятую.
+
+    created_by_name:
+      name: Владелец
+      attributes: [ readonly ]
+
+    created_at:
+      name: Дата создания
+      type: date
+      attributes: [ readonly ]
+
+
+users:
+
+  name_gen: пользователя
+  name_accus: пользователя
+  title: Пользователи
+
+  columns:
+    id:
+      name: id
+      attributes: [ readonly ]
+
+    login:
+      name: Логин
+      template: >
+        row.login + (row.name ? ' (' + row.name + ')' : '')
+
+    name:
+      name: Отображаемое имя
+      attributes: [ nullable, hidden ]
+      tooltip: По умолчанию совпадает с логином.
+
+    email:
+      name: E-mail
+      type: email
+
+    role_id:
+      name: Роль
+      entity: roles
+      default: 3
+
+    password:
+      name: Пароль
+      type: password
+      tooltip: Введите пароль, если хотите его изменить. Иначе оставьте поле пустым.
+      attributes: [ nullable, hidden, readonly, on_form ]
+
+    created_at:
+      name: Дата регистрации
+      type: date
+      attributes: [ readonly ]

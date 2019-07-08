@@ -1,0 +1,61 @@
+.shaded, .ok {
+    color: #999;
+}
+
+.bad {
+    color: red;
+}
+
+.good {
+    color: green;
+}
+
+.textlogo {
+	font-family: 'Noticia Text', serif;
+	font-size: 2em;
+	/*letter-spacing: 0.07em;*/
+	margin-top: 4px;
+	margin-bottom: 6px;
+	/*margin-left: 16px;*/
+}
+
+.sub-th {
+    font-weight: normal;
+    font-size: 80%;
+    color: #999;
+}
+
+/*.btn--sync {
+    color: lightgreen;
+}
+
+.btn--sync:hover {
+    color: lawngreen;
+}*/
+
+.lightgreen {
+    color: lightgreen;
+}
+
+.lawngreen {
+    color: lawngreen;
+}
+
+.table>tbody>tr>td/*,
+.table>tbody>tr>th,
+.table>tfoot>tr>td,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>thead>tr>th*/ {
+    vertical-align: initial;
+}
+
+
+.table>tbody>tr>td,
+.table>tbody>tr>th,
+.table>tfoot>tr>td,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>thead>tr>th {
+    padding: 5px;
+}
